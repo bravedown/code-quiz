@@ -55,6 +55,7 @@ var time = 50;
 var qNum = 0;
 var correctAnswers = 0;
 var renderQuestions = () => {
+    $("#question").text(questions[qNum].question);
     for (let i = 1; i < 6; i++) {
         $(`#choice${i}`).text(questions[qNum][`choice${i}`]);
         $(`#choice${i}`).attr("style", "display: inline");
@@ -68,14 +69,26 @@ var initQuiz = () => {
     $("#quiz-start").attr("style", "display: inline");
 }
 
+function scrambleQuestions(arr) {
+    var newArr = arr;
+    var returnArr = [];
+    for (let i = 0; i < 5; i++) {
+        var randInt = Math.floor(Math.random() * (newArr.length))
+        console.log(randInt);
+        returnArr.push(newArr[randInt])
+        newArr.splice(randInt, 1);
+    }
+    return returnArr;
+}
+
 const init = () => {
     $(`.choice-button`).on("click", event => {
         console.log("Answer chosen: " + event.target.textContent);
         checkAnswer(event.target.textContent);
     })
     $("#quiz-start").on("click", () => renderQuestions());
+    questions = scrambleQuestions(questions);
     updateAnswer();
-
 };
 init();
 
@@ -87,10 +100,21 @@ function checkAnswer(ans) {
     } else {
         console.log("wrong answer");
     }
-    qNum++;
-    renderQuestions();
-    console.log("Correct answer is " + currentAnswer);
-    updateAnswer();
+    if (qNum < questions.length - 1) {
+        qNum++;
+        renderQuestions();
+        console.log("Correct answer is " + currentAnswer);
+        updateAnswer();
+    } else {
+        endQuiz();
+    }
+}
+
+function endQuiz() {
+    initQuiz();
+    $("#correct-answers").text(`Correct answers: ${correctAnswers}`);
+    $("#post-quiz").attr("style", "display: inline");
+    
 }
 // var choice2 = $("#choice2");
 // var choice3 = $("#choice3");

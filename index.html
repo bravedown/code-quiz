@@ -14,7 +14,7 @@
         <h1>JavaScript Quiz!</h1>
         <button id="quiz-start">Start the Quiz</button>
         <div id="question-container">
-            <h2 id="question-number"></h2>
+            <h2 id="question"></h2>
             <button id="choice1" class="choice-button"></button>
             <button id="choice2" class="choice-button"></button>
             <button id="choice3" class="choice-button"></button>
@@ -22,7 +22,13 @@
             <button id="choice5" class="choice-button"></button>
             
         </div>
-
+        <div id="post-quiz" style="display: none">
+            <h2>Quiz Finished!</h2>
+            <h3 id="correct-answers"></h3>
+            <input type="text" id="initials" placeholder="Put your initials here!">
+            <button id="add-hiscore">Submit!</button>
+        
+        </div>
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
