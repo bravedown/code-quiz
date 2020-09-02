@@ -7,7 +7,7 @@ var questions = [
         choice3: "const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);",
         choice4: "let getRandomInt = (min, max) => return Math.floor(Math.random() * (max - min) + min + 1);",
         choice5: "None of the above.",
-        correct: "choice3"
+        correct: "const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);"
     },
     {
         name: "Question 2",
@@ -17,7 +17,7 @@ var questions = [
         choice3: ".toString()",
         choice4: ".forEach()",
         choice5: ".unShift",
-        correct: "choice5"
+        correct: ".unShift"
     },
     {
         name: "Question 3",
@@ -27,7 +27,7 @@ var questions = [
         choice3: "Boolean(0)",
         choice4: "Boolean(1337)",
         choice5: "None of the above.",
-        correct: "choice3"
+        correct: "Boolean(0)"
     },
     {
         name: "Question 4",
@@ -37,7 +37,7 @@ var questions = [
         choice3: '"object"',
         choice4: '"array"',
         choice5: '"boolean"',
-        correct: "choice3"
+        correct: '"object"'
     },
     {
         name: "Question 5",
@@ -47,7 +47,52 @@ var questions = [
         choice3: "ch3",
         choice4: "ch4",
         choice5: "None of the above.",
-        correct: "choice2"
+        correct: "ch2"
     }
 ];
+var currentAnswer = "";
+var time = 50;
+var qNum = 0;
+var correctAnswers = 0;
+var renderQuestions = () => {
+    for (let i = 1; i < 6; i++) {
+        $(`#choice${i}`).text(questions[qNum][`choice${i}`]);
+        $(`#choice${i}`).attr("style", "display: inline");
+    }
+};
+var choice1 = $("#choice1");
+var updateAnswer = () => currentAnswer = questions[qNum].correct;
 
+var initQuiz = () => {
+    for (let i = 1; i < 6; i++) $(`#choice${i}`).attr("style", "display: none");
+    $("#quiz-start").attr("style", "display: inline");
+}
+
+const init = () => {
+    $(`.choice-button`).on("click", event => {
+        console.log("Answer chosen: " + event.target.textContent);
+        checkAnswer(event.target.textContent);
+    })
+    $("#quiz-start").on("click", () => renderQuestions());
+    updateAnswer();
+
+};
+init();
+
+function checkAnswer(ans) {
+    if (ans === currentAnswer) {
+        console.log("correct answer");
+        correctAnswers++;
+        console.log("correct answers: " + correctAnswers);
+    } else {
+        console.log("wrong answer");
+    }
+    qNum++;
+    renderQuestions();
+    console.log("Correct answer is " + currentAnswer);
+    updateAnswer();
+}
+// var choice2 = $("#choice2");
+// var choice3 = $("#choice3");
+// var choice4 = $("#choice4");
+// var choice5 = $("#choice5");
