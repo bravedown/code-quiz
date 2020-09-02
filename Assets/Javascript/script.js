@@ -54,6 +54,7 @@ var currentAnswer = "";
 var time = 50;
 var qNum = 0;
 var correctAnswers = 0;
+var hiscores = 0;
 var renderQuestions = () => {
     $("#question").text(questions[qNum].question);
     for (let i = 1; i < 6; i++) {
@@ -64,7 +65,7 @@ var renderQuestions = () => {
 var choice1 = $("#choice1");
 var updateAnswer = () => currentAnswer = questions[qNum].correct;
 
-var initQuiz = () => {
+var clearQuiz = () => {
     for (let i = 1; i < 6; i++) $(`#choice${i}`).attr("style", "display: none");
     $("#quiz-start").attr("style", "display: inline");
 }
@@ -81,16 +82,7 @@ function scrambleQuestions(arr) {
     return returnArr;
 }
 
-const init = () => {
-    $(`.choice-button`).on("click", event => {
-        console.log("Answer chosen: " + event.target.textContent);
-        checkAnswer(event.target.textContent);
-    })
-    $("#quiz-start").on("click", () => renderQuestions());
-    questions = scrambleQuestions(questions);
-    updateAnswer();
-};
-init();
+
 
 function checkAnswer(ans) {
     if (ans === currentAnswer) {
@@ -110,12 +102,50 @@ function checkAnswer(ans) {
     }
 }
 
+function updateHiscores(scores=false) {
+    if (scores) {
+        $("#hiscores").empty();
+        localStorage.setItem("hiscores", JSON.stringify(scores));
+        for (let i in scores) {
+            var newLi = $(`<li>Initials: ${scores[i][0]} Score: ${scores[i][1]}</li>`)
+            console.log(scores)
+            $("#hiscores").append(newLi);
+        }
+    }
+
+}
+
+var getHiscores = () => JSON.parse(localStorage.getItem("hiscores"));
+var addHiscore = () => hiscores.push([$("#initials").text(), correctAnswers]);
+
+$("#add-hiscore").on("click", event => {
+    // event.preventDefaults();
+    if (!hiscores) {
+        hiscores = [];
+    }
+    addHiscore();
+    updateHiscores(hiscores);
+});
+
 function endQuiz() {
-    initQuiz();
+    clearQuiz();
     $("#correct-answers").text(`Correct answers: ${correctAnswers}`);
     $("#post-quiz").attr("style", "display: inline");
     
 }
+
+const init = () => {
+    $(".choice-button").on("click", event => {
+        console.log("Answer chosen: " + event.target.textContent);
+        checkAnswer(event.target.textContent);
+    })
+    $("#quiz-start").on("click", () => renderQuestions());
+    questions = scrambleQuestions(questions);
+    updateAnswer();
+    hiscores = getHiscores();
+    updateHiscores(hiscores);
+};
+init();
 // var choice2 = $("#choice2");
 // var choice3 = $("#choice3");
 // var choice4 = $("#choice4");
