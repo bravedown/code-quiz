@@ -62,12 +62,13 @@ var renderQuestions = () => {
         $(`#choice${i}`).attr("style", "display: inline");
     }
 };
-var choice1 = $("#choice1");
 var updateAnswer = () => currentAnswer = questions[qNum].correct;
 
 var clearQuiz = () => {
     for (let i = 1; i < 6; i++) $(`#choice${i}`).attr("style", "display: none");
-    $("#quiz-start").attr("style", "display: inline");
+    $("#question").text("");
+    $("#quiz-start").attr("style", "display: none");
+    $("#view-hiscores").attr("style", "display: none");
 }
 
 function scrambleQuestions(arr) {
@@ -81,8 +82,6 @@ function scrambleQuestions(arr) {
     }
     return returnArr;
 }
-
-
 
 function checkAnswer(ans) {
     if (ans === currentAnswer) {
@@ -111,20 +110,31 @@ function updateHiscores(scores=false) {
             console.log(scores)
             $("#hiscores").append(newLi);
         }
+    } else {
+        $("#hiscores").empty();
+        localStorage.clear();
     }
 
 }
 
 var getHiscores = () => JSON.parse(localStorage.getItem("hiscores"));
-var addHiscore = () => hiscores.push([$("#initials").text(), correctAnswers]);
+var addHiscore = () => hiscores.push([$("#initials").val(), correctAnswers]);
 
 $("#add-hiscore").on("click", event => {
-    // event.preventDefaults();
     if (!hiscores) {
         hiscores = [];
     }
     addHiscore();
     updateHiscores(hiscores);
+});
+
+$("#clear-hiscores").on("click", event => {
+    hiscores = false;
+    updateHiscores(hiscores)
+});
+
+$("#view-hiscores").on("click", event => {
+    endQuiz();
 });
 
 function endQuiz() {
